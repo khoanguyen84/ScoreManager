@@ -1,29 +1,51 @@
 import React, { useState, useEffect } from "react";
 import studentData from '../../db/student.json';
+import ViewStudent from "../ViewStudent/ViewStudent";
 function SearchTab() {
     const [students, setStudents] = useState([]);
-    const [student, setStudent] = useState({
-        id : 0,
-        studentName : "",
-        java : 0,
-        fe : 0,
-        react : 0
-    });
+    const [student, setStudent] = useState({});
+    const [keyword, setKeyword]  = useState();
 
     useEffect(() => setStudents(studentData), []);
 
     const viewStudent = (stdId) => {
         let student = students.find((std) => std.id === stdId);
-        setStudent(student);
+        setStudent({
+            ...student,
+            aveScore: ((student.java + student.fe + student.react) / 3).toFixed(2)
+        });
     }
+
+    const handleSearch = () => {
+        setStudent({});
+        if(keyword){
+            if(!validator(keyword)){
+                document.querySelector("#errorMessage").classList.remove('d-none');
+                return;
+            }
+            let result = students.filter((std) => std.studentName.toLowerCase().includes(keyword.toLowerCase()));
+            setStudents(result);
+        }
+        else{
+            setStudents(studentData);
+        }
+        document.querySelector("#errorMessage").classList.add('d-none');
+    }
+
+    const validator = (text) => {
+        var regex = /^[a-zA-Z ]*$/;
+        return text.match(regex);
+    }
+
     return (
         <React.Fragment>
             <div className="d-flex flex-column align-items-center">
                 <h3>Search Form</h3>
                 <div className="search-form d-flex w-50 align-items-center">
-                    <input type="text" className="form-control" />
-                    <button className="btn btn-primary btn-sm">Search</button>
+                    <input type="text" className="form-control" onInput={(e) => setKeyword(e.target.value)}/>
+                    <button className="btn btn-primary btn-sm" onClick={handleSearch}>Search</button>
                 </div>
+                <p id="errorMessage" className="text-danger d-none">Student Name you entered is not valid, please try again!</p>
             </div>
             <div className="d-flex flex-column align-items-center">
                 <h3>Students Info</h3>
@@ -38,7 +60,7 @@ function SearchTab() {
                     <tbody>
                         {
                             students.map((std) => (
-                                <tr className={`${ std.java >= 5 && std.fe >= 5 && std.react >= 5 ? "row-active" : "bg-secondary"}`}>
+                                <tr key={std.id} className={`${std.java >= 5 && std.fe >= 5 && std.react >= 5 ? "row-active" : "bg-secondary"}`}>
                                     <td>{std.id}</td>
                                     <td>{std.studentName}</td>
                                     <td>
@@ -50,27 +72,18 @@ function SearchTab() {
                     </tbody>
                 </table>
             </div>
-            <div className="d-flex flex-column align-items-center">
-                <h3>Detail</h3>
-                <div className="d-flex flex-column align-items-center w-100">
-                    <div className="w-100 bg-primary text-center text-white py-3">Tuan Doan</div>
-                    <div className="d-flex justify-content-around w-100 border border-primary py-2">
-                        <div className="d-flex flex-column align-items-center w-25">
-                            <h6>Java</h6>
-                            <div className="bg-success text-white w-100 py-3 text-center">2</div>
-                        </div>
-                        <div className="d-flex flex-column align-items-center w-25">
-                            <h6>FE</h6>
-                            <div className="bg-success text-white w-100 py-3 text-center">2</div>
-                        </div>
-                        <div className="d-flex flex-column align-items-center w-25">
-                            <h6>React</h6>
-                            <div className="bg-success text-white w-100 py-3 text-center">2</div>
-                        </div>
-                    </div>
-                    <div className="w-50 bg-primary text-center text-white py-3 my-2">3.4</div>
-                </div>
-            </div>
+            {
+                Object.keys(student).length > 0 && (
+                    // <ViewStudent 
+                    //     studentName = {student.studentName}
+                    //     fe = {student.fe}
+                    //     react = {student.react}
+                    //     java = {student.java}
+                    //     aveScore = {student.aveScore}
+                    // />
+                    <ViewStudent data = {student} />
+                )
+            }
         </React.Fragment>
 
     )
