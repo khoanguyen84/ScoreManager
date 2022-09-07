@@ -7,6 +7,10 @@ const menus = [
         uri: '/student'
     },
     {
+        name: "Create Student",
+        uri: '/create'
+    },
+    {
         name: "Search Tab",
         uri: '/search'
     }

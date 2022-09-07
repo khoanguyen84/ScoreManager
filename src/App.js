@@ -3,6 +3,7 @@ import './App.css';
 import Menu from './components/Menu/Menu';
 import StudentManager from './components/StudentManager/StudentManager';
 import SearchTab from './components/SearchTab/SearchTab';
+import CreateStudent from './components/CreateStudent/CreateStudent';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path='/student' element={<StudentManager/>} />
                     <Route path='/search' element={<SearchTab/>} />
+                    <Route path='/create' element={<CreateStudent/>} />
                 </Routes>
             </div>
         </div>
