@@ -5,6 +5,10 @@ class StudentService{
         return axios.get(StudentAPI);
     }
 
+    static getStudentById(studentId){
+        return axios.get(`${StudentAPI}/${studentId}`);
+    }
+
     static removeStudent(id){
         return axios.delete(`${StudentAPI}/${id}`);
     }

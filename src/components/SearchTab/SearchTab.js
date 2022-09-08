@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Spinner from "../Spinner/Spinner";
 import ViewStudent from "../ViewStudent/ViewStudent";
 import StudentService from './../../services/StudentService/studentService';
+import { Link, useParams } from 'react-router-dom';
+import StudentDetail from './../StudentDetail/StudentDetail';
 
 function SearchTab() {
     const [state, setState] = useState({
@@ -12,6 +14,8 @@ function SearchTab() {
 
     const [student, setStudent] = useState({});
     const [keyword, setKeyword] = useState();
+
+    const { studentId } = useParams();
 
     useEffect(() => {
         try {
@@ -105,8 +109,11 @@ function SearchTab() {
                                     <tr key={std.id} className={`${std.java >= 5 && std.fe >= 5 && std.react >= 5 ? "row-active" : "bg-secondary"}`}>
                                         <td>{std.id}</td>
                                         <td>{std.studentName}</td>
-                                        <td>
+                                        {/* <td>
                                             <button className="btn btn-primary btn-sm" onClick={() => viewStudent(std.id)}>View</button>
+                                        </td> */}
+                                        <td>
+                                            <Link  className="btn btn-primary btn-sm" to={`/search/${std.id}`}>View</Link>
                                         </td>
                                     </tr>
                                 ))
@@ -114,7 +121,7 @@ function SearchTab() {
                         </tbody>
                     </table>
                 </div>
-                {
+                {/* {
                     Object.keys(student).length > 0 && (
                         // <ViewStudent 
                         //     studentName = {student.studentName}
@@ -125,6 +132,9 @@ function SearchTab() {
                         // />
                         <ViewStudent data={student} />
                     )
+                } */}
+                {
+                    studentId && <StudentDetail studentId = {studentId} />
                 }
             </React.Fragment>
 

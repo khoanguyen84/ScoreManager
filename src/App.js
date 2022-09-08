@@ -16,6 +16,7 @@ function App() {
                 <Routes>
                     <Route path='/student' element={<StudentManager/>} />
                     <Route path='/search' element={<SearchTab/>} />
+                    <Route path='/search/:studentId' element={<SearchTab/>} />
                     <Route path='/create' element={<CreateStudent/>} />
                 </Routes>
             </div>
